@@ -139,7 +139,7 @@ export const restore = mutation({
     const existingDocument = await ctx.db.get(args.id);
 
     if (!existingDocument) {
-      throw new Error("Document not found");
+      throw new Error("Not found");
     }
 
     if (existingDocument.userId !== userId) {
@@ -161,23 +161,24 @@ export const restore = mutation({
 
         await recursiveRestore(child._id);
       }
-
-      const options: Partial<Doc<"documents">> = {
-        isArchived: false,
-      };
-      if (existingDocument.parentDocument) {
-        const parent = await ctx.db.get(existingDocument.parentDocument);
-        if (parent?.isArchived) {
-          options.parentDocument = undefined;
-        }
-      }
-
-      const document = await ctx.db.patch(args.id, options);
-
-      recursiveRestore(args.id);
-
-      return document;
     };
+
+    const options: Partial<Doc<"documents">> = {
+      isArchived: false,
+    };
+
+    if (existingDocument.parentDocument) {
+      const parent = await ctx.db.get(existingDocument.parentDocument);
+      if (parent?.isArchived) {
+        options.parentDocument = undefined;
+      }
+    }
+
+    const document = await ctx.db.patch(args.id, options);
+
+    recursiveRestore(args.id);
+
+    return document;
   },
 });
 
