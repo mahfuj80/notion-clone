@@ -1,15 +1,16 @@
 "use client";
 
-import { ConfirmModal } from "@/components/modals/confirm-modal";
-import { Spinner } from "@/components/spinner";
-import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { useQuery, useMutation } from "convex/react";
+import { Search, Trash, Undo } from "lucide-react";
+import { toast } from "sonner";
+
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useMutation, useQuery } from "convex/react";
-import { Search, Trash, Undo } from "lucide-react";
-import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
+import { Spinner } from "@/components/spinner";
+import { Input } from "@/components/ui/input";
+import { ConfirmModal } from "@/components/modals/confirm-modal";
 
 export const TrashBox = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ export const TrashBox = () => {
 
   const onRestore = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    documentId: Id<"documents">
+    documentId: Id<"documents">,
   ) => {
     event.stopPropagation();
     const promise = restore({ id: documentId });
@@ -38,17 +39,19 @@ export const TrashBox = () => {
     toast.promise(promise, {
       loading: "Restoring note...",
       success: "Note restored!",
-      error: "Failed to restore note.",
+      error:" Failed to restore note."
     });
   };
 
-  const onRemove = (documentId: Id<"documents">) => {
+  const onRemove = (
+    documentId: Id<"documents">,
+  ) => {
     const promise = remove({ id: documentId });
 
     toast.promise(promise, {
       loading: "Deleting note...",
       success: "Note deleted!",
-      error: "Failed to delete note.",
+      error:" Failed to delete note."
     });
 
     if (params.documentId === documentId) {
@@ -59,10 +62,11 @@ export const TrashBox = () => {
   if (documents === undefined) {
     return (
       <div className="h-full flex items-center justify-center p-4">
-        <Spinner size={"lg"} />
+        <Spinner size="lg" />
       </div>
     );
   }
+
   return (
     <div className="text-sm">
       <div className="flex items-center gap-x-1 p-2">
@@ -75,17 +79,19 @@ export const TrashBox = () => {
         />
       </div>
       <div className="mt-2 px-1 pb-1">
-        <p className="hidden last:block text-xs text-center to-muted-foreground pb-2">
+        <p className="hidden last:block text-xs text-center text-muted-foreground pb-2">
           No documents found.
         </p>
         {filteredDocuments?.map((document) => (
           <div
-            className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between"
             key={document._id}
             role="button"
             onClick={() => onClick(document._id)}
+            className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between"
           >
-            <span className="truncate pl-2">{document.title}</span>
+            <span className="truncate pl-2">
+              {document.title}
+            </span>
             <div className="flex items-center">
               <div
                 onClick={(e) => onRestore(e, document._id)}

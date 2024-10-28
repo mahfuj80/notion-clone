@@ -15,9 +15,12 @@ import { Publish } from "./publish";
 interface NavbarProps {
   isCollapsed: boolean;
   onResetWidth: () => void;
-}
+};
 
-export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
+export const Navbar = ({
+  isCollapsed,
+  onResetWidth
+}: NavbarProps) => {
   const params = useParams();
 
   const document = useQuery(api.documents.getById, {
@@ -32,7 +35,7 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
           <Menu.Skeleton />
         </div>
       </nav>
-    );
+    )
   }
 
   if (document === null) {
@@ -57,7 +60,9 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
           </div>
         </div>
       </nav>
-      {document.isArchived && <Banner documentId={document._id} />}
+      {document.isArchived && (
+        <Banner documentId={document._id} />
+      )}
     </>
-  );
-};
+  )
+}

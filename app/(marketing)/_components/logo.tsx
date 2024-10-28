@@ -3,26 +3,31 @@ import { Poppins } from "next/font/google";
 
 import { cn } from "@/lib/utils";
 
-const font = Poppins({ subsets: ["latin"], weight: ["400", "600"] });
+const font = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "600"]
+});
 
 export const Logo = () => {
   return (
     <div className="hidden md:flex items-center gap-x-2">
       <Image
-        className="dark:hidden"
-        height={40}
-        width={40}
-        src={"/logo.svg"}
+        src="/logo.svg"
+        height="40"
+        width="40"
         alt="Logo"
+        className="dark:hidden"
       />
       <Image
-        className="hidden dark:block"
-        height={40}
-        width={40}
-        src={"/logo-dark.svg"}
+        src="/logo-dark.svg"
+        height="40"
+        width="40"
         alt="Logo"
+        className="hidden dark:block"
       />
-      <p className={cn("font-semibold", font.className)}>Notion</p>
+      <p className={cn("font-semibold", font.className)}>
+        Jotion
+      </p>
     </div>
-  );
-};
+  )
+}

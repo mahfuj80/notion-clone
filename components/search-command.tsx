@@ -12,9 +12,8 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList,
+  CommandList
 } from "@/components/ui/command";
-
 import { useSearch } from "@/hooks/use-search";
 import { api } from "@/convex/_generated/api";
 
@@ -38,23 +37,26 @@ export const SearchCommand = () => {
         e.preventDefault();
         toggle();
       }
-    };
+    }
+
     document.addEventListener("keydown", down);
-    return () => {
-      document.removeEventListener("keydown", down);
-    };
+    return () => document.removeEventListener("keydown", down);
   }, [toggle]);
 
   const onSelect = (id: string) => {
-    router.push(`/document/${id}`);
+    router.push(`/documents/${id}`);
     onClose();
   };
 
-  if (!isMounted) return null;
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <CommandDialog open={isOpen} onOpenChange={onClose}>
-      <CommandInput placeholder={`Search ${user?.fullName}'s Notion`} />
+      <CommandInput
+        placeholder={`Search ${user?.fullName}'s Jotion...`}
+      />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Documents">
@@ -63,18 +65,22 @@ export const SearchCommand = () => {
               key={document._id}
               value={`${document._id}-${document.title}`}
               title={document.title}
-              onSelect={onSelect}
+              onSelect={() => onSelect(document._id)}
             >
               {document.icon ? (
-                <p className="mr-2 text-[18px]">{document.icon}</p>
+                <p className="mr-2 text-[18px]">
+                  {document.icon}
+                </p>
               ) : (
                 <File className="mr-2 h-4 w-4" />
               )}
-              <span>{document.title}</span>
+              <span>
+                {document.title}
+              </span>
             </CommandItem>
           ))}
         </CommandGroup>
       </CommandList>
     </CommandDialog>
-  );
-};
+  )
+}
